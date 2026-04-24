@@ -3,6 +3,10 @@ const sectionsRoot = document.getElementById("inspection-sections");
 const saveStatus = document.getElementById("save-status");
 const resultMessage = document.getElementById("result-message");
 const jobLocationSelect = document.getElementById("job-location");
+const submitButton = document.getElementById("submit-button");
+const successPanel = document.getElementById("success-panel");
+const successMessage = document.getElementById("success-message");
+const newEntryButton = document.getElementById("new-entry-button");
 const storageKey = "fall-protection-inspection-draft-v1";
 
 bootstrap().catch((error) => {
@@ -26,6 +30,7 @@ async function bootstrap() {
   form.addEventListener("input", debounce(handleDraftSave, 250));
   form.addEventListener("change", debounce(handleDraftSave, 250));
   form.addEventListener("submit", handleSubmit);
+  newEntryButton.addEventListener("click", resetForNextEntry);
 }
 
 function renderJobLocations(jobLocations) {
@@ -124,6 +129,8 @@ async function handleSubmit(event) {
   event.preventDefault();
   resultMessage.textContent = "";
   saveStatus.textContent = "Submitting inspection...";
+  submitButton.disabled = true;
+  submitButton.textContent = "Submitting...";
 
   const payload = buildSubmissionPayload();
   const response = await fetch("/api/submissions", {
@@ -138,18 +145,13 @@ async function handleSubmit(event) {
   if (!response.ok || !result.ok) {
     saveStatus.textContent = "Submission failed.";
     resultMessage.textContent = result.error || "Could not submit inspection.";
+    submitButton.disabled = false;
+    submitButton.textContent = "Submit Inspection";
     return;
   }
 
   localStorage.removeItem(storageKey);
-  saveStatus.textContent = "Inspection submitted successfully.";
-  resultMessage.textContent = result.message;
-  form.reset();
-  form.elements.namedItem("inspectionDate").value = new Date().toISOString().slice(0, 10);
-
-  document.querySelectorAll("input[type=radio][value='na']").forEach((input) => {
-    input.checked = true;
-  });
+  showSuccessState(result);
 }
 
 function buildSubmissionPayload() {
@@ -188,4 +190,30 @@ function debounce(fn, wait) {
     window.clearTimeout(timeoutId);
     timeoutId = window.setTimeout(() => fn(...args), wait);
   };
+}
+
+function showSuccessState(result) {
+  const uploadText = result.uploadedToDropbox
+    ? `The PDF uploaded to Dropbox at ${result.dropboxPath}.`
+    : "The PDF was created, but Dropbox upload is not configured yet.";
+
+  saveStatus.textContent = "Inspection submitted successfully.";
+  resultMessage.textContent = result.message;
+  successMessage.textContent = `${uploadText} File name: ${result.fileName}.`;
+  form.hidden = true;
+  successPanel.hidden = false;
+}
+
+function resetForNextEntry() {
+  successPanel.hidden = true;
+  form.hidden = false;
+  form.reset();
+  submitButton.disabled = false;
+  submitButton.textContent = "Submit Inspection";
+  saveStatus.textContent = "Draft autosaves in this browser.";
+  resultMessage.textContent = "";
+  form.elements.namedItem("inspectionDate").value = new Date().toISOString().slice(0, 10);
+  document.querySelectorAll("input[type=radio][value='na']").forEach((input) => {
+    input.checked = true;
+  });
 }

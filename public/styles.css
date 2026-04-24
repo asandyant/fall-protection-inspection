@@ -252,9 +252,33 @@ button {
   box-shadow: 0 10px 22px rgba(33, 93, 146, 0.28);
 }
 
+button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 #result-message {
   margin: 6px 0 0;
   color: var(--muted);
+}
+
+.success-panel {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+}
+
+.success-card {
+  width: min(760px, 100%);
+  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid rgba(217, 211, 200, 0.8);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.success-card h2 {
+  margin-bottom: 12px;
 }
 
 @media (max-width: 900px) {

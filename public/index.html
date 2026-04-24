@@ -106,9 +106,20 @@
             <strong id="save-status">Draft autosaves in this browser.</strong>
             <p id="result-message"></p>
           </div>
-          <button type="submit">Submit Inspection</button>
+          <button id="submit-button" type="submit">Submit Inspection</button>
         </section>
       </form>
+
+      <section id="success-panel" class="success-panel" hidden>
+        <div class="success-card">
+          <p class="eyebrow">Submission Complete</p>
+          <h2>Thank you. Your inspection was submitted.</h2>
+          <p id="success-message">
+            The report has been processed successfully.
+          </p>
+          <button id="new-entry-button" type="button">Start Another Inspection</button>
+        </div>
+      </section>
     </main>
 
     <template id="group-template">
