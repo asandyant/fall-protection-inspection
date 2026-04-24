@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fall Protection Inspection</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Daily Field Form</p>
+          <h1>Fall Protection Inspection Checklist</h1>
+          <p class="lede">
+            Built for crews in the field: one link, fast entry, autosave in the browser,
+            and a finished PDF uploaded to Dropbox after submission.
+          </p>
+        </div>
+        <div class="hero-card">
+          <p class="hero-label">Workflow</p>
+          <ol>
+            <li>Open the daily link</li>
+            <li>Complete the checklist</li>
+            <li>Submit and generate the PDF</li>
+            <li>Send the report to Dropbox automatically</li>
+          </ol>
+        </div>
+      </section>
+
+      <form id="inspection-form" class="form-shell">
+        <section class="card grid two">
+          <label>
+            <span>Job Location</span>
+            <select name="projectName" id="job-location" required>
+              <option value="">Select a job location</option>
+            </select>
+          </label>
+          <label>
+            <span>Equipment Assigned To</span>
+            <input name="equipmentAssignedTo" type="text" required />
+          </label>
+          <label>
+            <span>Inspector</span>
+            <input name="inspector" type="text" required />
+          </label>
+          <label>
+            <span>Date</span>
+            <input name="inspectionDate" type="date" required />
+          </label>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h2>Equipment</h2>
+            <p>Use one or both equipment blocks depending on the job.</p>
+          </div>
+          <div class="grid equipment-grid">
+            <fieldset>
+              <legend>Equipment 1</legend>
+              <label>
+                <span>Type / Make / Model</span>
+                <input name="equipment.0.typeMakeModel" type="text" />
+              </label>
+              <label>
+                <span>Serial #</span>
+                <input name="equipment.0.serialNumber" type="text" />
+              </label>
+              <label>
+                <span>Lot #</span>
+                <input name="equipment.0.lotNumber" type="text" />
+              </label>
+            </fieldset>
+            <fieldset>
+              <legend>Equipment 2</legend>
+              <label>
+                <span>Type / Make / Model</span>
+                <input name="equipment.1.typeMakeModel" type="text" />
+              </label>
+              <label>
+                <span>Serial #</span>
+                <input name="equipment.1.serialNumber" type="text" />
+              </label>
+              <label>
+                <span>Lot #</span>
+                <input name="equipment.1.lotNumber" type="text" />
+              </label>
+            </fieldset>
+          </div>
+        </section>
+
+        <section id="inspection-sections" class="inspection-grid"></section>
+
+        <section class="card">
+          <div class="section-head">
+            <h2>Comments / Action Items</h2>
+            <p>Record anything the crew or supervisor needs to follow up on.</p>
+          </div>
+          <label>
+            <textarea name="comments" rows="5"></textarea>
+          </label>
+        </section>
+
+        <section class="submit-bar">
+          <div>
+            <strong id="save-status">Draft autosaves in this browser.</strong>
+            <p id="result-message"></p>
+          </div>
+          <button type="submit">Submit Inspection</button>
+        </section>
+      </form>
+    </main>
+
+    <template id="group-template">
+      <section class="card">
+        <div class="section-head">
+          <h2></h2>
+        </div>
+        <div class="subsections"></div>
+      </section>
+    </template>
+
+    <template id="subsection-template">
+      <div class="subsection">
+        <h3></h3>
+        <div class="checklist"></div>
+      </div>
+    </template>
+
+    <template id="item-template">
+      <div class="check-row">
+        <p class="item-label"></p>
+        <div class="radio-set">
+          <label><input type="radio" value="pass" /> <span>Pass</span></label>
+          <label><input type="radio" value="fail" /> <span>Fail</span></label>
+          <label><input type="radio" value="na" /> <span>N/A</span></label>
+        </div>
+      </div>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "fall-protection-inspection-app",
+  "version": "1.0.0",
+  "description": "Daily fall protection inspection form with PDF generation and Dropbox upload.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pdf-lib": "^1.17.1"
+  }
+}
