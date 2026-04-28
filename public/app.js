@@ -4,6 +4,7 @@ const saveStatus = document.getElementById("save-status");
 const resultMessage = document.getElementById("result-message");
 const jobLocationSelect = document.getElementById("job-location");
 const submitButton = document.getElementById("submit-button");
+const submitBar = document.querySelector(".submit-bar");
 const successPanel = document.getElementById("success-panel");
 const successMessage = document.getElementById("success-message");
 const newEntryButton = document.getElementById("new-entry-button");
@@ -201,12 +202,15 @@ function showSuccessState(result) {
   resultMessage.textContent = result.message;
   successMessage.textContent = `${uploadText} File name: ${result.fileName}.`;
   form.hidden = true;
+  submitBar.hidden = true;
   successPanel.hidden = false;
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function resetForNextEntry() {
   successPanel.hidden = true;
   form.hidden = false;
+  submitBar.hidden = false;
   form.reset();
   submitButton.disabled = false;
   submitButton.textContent = "Submit Inspection";
