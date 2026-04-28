@@ -34,7 +34,14 @@ npm start
 
 ## Dropbox setup
 
-Create a Dropbox app and generate an access token with file upload access. Then set:
+Recommended production setup: use Dropbox refresh-token auth so uploads keep working without manually rotating access tokens. Set:
+
+- `DROPBOX_APP_KEY`
+- `DROPBOX_APP_SECRET`
+- `DROPBOX_REFRESH_TOKEN`
+- `DROPBOX_ROOT_PATH`
+
+Fallback setup: if you only want quick testing, you can still set:
 
 - `DROPBOX_ACCESS_TOKEN`
 - `DROPBOX_ROOT_PATH`
@@ -44,6 +51,21 @@ Completed PDFs are uploaded into dated folders like:
 `/Safety/Fall Protection Inspections/2026/04/fall-inspection_2026-04-24_project_inspector.pdf`
 
 If Dropbox credentials are not set, the app still works and saves the generated PDF locally under `output/`.
+
+## Dropbox refresh token setup
+
+For long-running hosting on Render, use a refresh token instead of a short-lived access token.
+
+1. Create a Dropbox app with the file scopes you need.
+2. Note your app key and app secret from the Dropbox App Console.
+3. Authorize the app with offline access so Dropbox returns a refresh token.
+4. Add these in Render:
+   - `DROPBOX_APP_KEY`
+   - `DROPBOX_APP_SECRET`
+   - `DROPBOX_REFRESH_TOKEN`
+   - `DROPBOX_ROOT_PATH`
+
+When these three refresh-token variables are present, the app automatically fetches a fresh access token before each upload.
 
 ## Render deployment
 

@@ -378,7 +378,7 @@ async function buildInspectionPdf(submission) {
 }
 
 async function uploadToDropbox({ fileName, pdfBytes, submission }) {
-  const accessToken = process.env.DROPBOX_ACCESS_TOKEN;
+  const accessToken = await getDropboxAccessToken();
   const rootPath = process.env.DROPBOX_ROOT_PATH || "/Safety/Fall Protection Inspections";
 
   if (!accessToken) {
@@ -415,6 +415,37 @@ async function uploadToDropbox({ fileName, pdfBytes, submission }) {
     uploaded: true,
     path: fullPath
   };
+}
+
+async function getDropboxAccessToken() {
+  const refreshToken = process.env.DROPBOX_REFRESH_TOKEN;
+  const appKey = process.env.DROPBOX_APP_KEY;
+  const appSecret = process.env.DROPBOX_APP_SECRET;
+
+  if (refreshToken && appKey && appSecret) {
+    const tokenResponse = await fetch("https://api.dropboxapi.com/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: appKey,
+        client_secret: appSecret
+      })
+    });
+
+    if (!tokenResponse.ok) {
+      const details = await tokenResponse.text();
+      throw new Error(`Dropbox token refresh failed: ${details}`);
+    }
+
+    const tokenPayload = await tokenResponse.json();
+    return tokenPayload.access_token || null;
+  }
+
+  return process.env.DROPBOX_ACCESS_TOKEN || null;
 }
 
 async function createDropboxFolder(folderPath, accessToken) {
